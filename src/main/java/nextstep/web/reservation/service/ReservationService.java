@@ -2,6 +2,8 @@ package nextstep.web.reservation.service;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.domain.Reservation;
+import nextstep.web.common.exception.BusinessException;
+import nextstep.web.common.exception.CommonErrorCode;
 import nextstep.web.reservation.dto.CreateReservationRequestDto;
 import nextstep.web.reservation.dto.CreateReservationResponseDto;
 import nextstep.web.reservation.dto.FindReservationResponseDto;
@@ -21,7 +23,8 @@ public class ReservationService {
     }
 
     public FindReservationResponseDto findReservation(Long id) {
-        Reservation reservation = reservationDao.findById(id);
+        Reservation reservation = reservationDao.findById(id)
+                .orElseThrow(() -> new BusinessException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
         return FindReservationResponseDto.of(reservation);
     }

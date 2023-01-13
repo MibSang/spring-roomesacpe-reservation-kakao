@@ -36,9 +36,11 @@ class ReservationDaoTest {
         Long createdId = reservationDao.save(reservation);
 
         Assertions.assertThat(reservationDao.findById(createdId)
+                        .orElseThrow(AssertionError::new)
                         .getId())
                 .isEqualTo(createdId);
         Assertions.assertThat(reservationDao.findById(createdId)
+                        .orElseThrow(AssertionError::new)
                         .getName())
                 .isEqualTo(reservation.getName());
     }
@@ -49,8 +51,7 @@ class ReservationDaoTest {
         Long createdId = reservationDao.save(reservation);
         reservationDao.deleteById(createdId);
 
-        Assertions.assertThatThrownBy(() -> reservationDao.findById(createdId))
-                .isInstanceOf(BusinessException.class);
+        Assertions.assertThat(reservationDao.findById(createdId).orElse(null)).isEqualTo(null);
     }
 
     @Test

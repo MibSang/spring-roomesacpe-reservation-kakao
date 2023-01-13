@@ -64,7 +64,8 @@ public class RoomEscapeApplication {
 
                 Long id = Long.parseLong(params.split(",")[0]);
 
-                Reservation reservation = reservationDao.findById(id);
+                Reservation reservation = reservationDao.findById(id)
+                        .orElseThrow(IllegalArgumentException::new);
 
                 System.out.println("예약 번호: " + reservation.getId());
                 System.out.println("예약 날짜: " + reservation.getDate());

@@ -5,6 +5,7 @@ import nextstep.domain.Reservation;
 import nextstep.web.common.exception.BusinessException;
 import nextstep.web.common.exception.CommonErrorCode;
 import nextstep.web.common.repository.RoomEscapeRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -34,14 +36,16 @@ public class ReservationDao implements RoomEscapeRepository<Reservation> {
     }
 
 
-    public Reservation findById(Long id) {
+    public Optional<Reservation> findById(Long id) {
         String sql = "SELECT * FROM RESERVATION WHERE ID = ?;";
-        List<Reservation> reservations = jdbcTemplate.query(sql, reservationRowMapper, id);
-        if (reservations.isEmpty()) {
-            throw new BusinessException(CommonErrorCode.RESOURCE_NOT_FOUND);
+        Reservation reservation;
+        try {
+            reservation = jdbcTemplate.queryForObject(sql, reservationRowMapper, id);
+        } catch (EmptyResultDataAccessException e) {
+            reservation = null;
         }
 
-        return reservations.get(0);
+        return Optional.ofNullable(reservation);
     }
 
     public List<Reservation> findByThemeId(Long themeId) {

@@ -5,6 +5,7 @@ import nextstep.domain.Theme;
 import nextstep.web.common.exception.BusinessException;
 import nextstep.web.common.exception.CommonErrorCode;
 import nextstep.web.common.repository.RoomEscapeRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -34,14 +36,16 @@ public class ThemeDao implements RoomEscapeRepository<Theme> {
     }
 
 
-    public Theme findById(Long id) {
+    public Optional<Theme> findById(Long id) {
         String sql = "SELECT * FROM THEME WHERE ID = ?;";
-        List<Theme> themes = jdbcTemplate.query(sql, themeRowMapper, id);
-        if (themes.isEmpty()) {
-            throw new BusinessException(CommonErrorCode.RESOURCE_NOT_FOUND);
+        Theme theme;
+        try {
+            theme = jdbcTemplate.queryForObject(sql, themeRowMapper, id);
+        } catch (EmptyResultDataAccessException e) {
+            theme = null;
         }
 
-        return themes.get(0);
+        return Optional.ofNullable(theme);
     }
 
     public List<Theme> findAll() {

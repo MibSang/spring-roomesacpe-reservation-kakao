@@ -16,7 +16,6 @@ public class ThemeService {
     private final ThemeDao themeDao;
     private final ReservationDao reservationDao;
 
-
     public CreateThemeResponseDto createTheme(CreateThemeRequestDto requestDto) {
         Theme theme = Theme.from(requestDto);
 
@@ -24,7 +23,8 @@ public class ThemeService {
     }
 
     public FindThemeResponseDto findTheme(Long id) {
-        Theme theme = themeDao.findById(id);
+        Theme theme = themeDao.findById(id)
+                .orElseThrow(() -> new BusinessException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
         return FindThemeResponseDto.of(theme);
     }
@@ -44,7 +44,9 @@ public class ThemeService {
         if (isReserved(id)) {
             throw new BusinessException(CommonErrorCode.RESERVED_THEME_ERROR);
         }
-        if (themeDao.update(Theme.of(requestDto, id)) == 0) {
+        Theme theme = Theme.of(requestDto, id);
+        int updatedRowNumber = themeDao.update(theme);
+        if (updatedRowNumber == 0) {
             throw new BusinessException(CommonErrorCode.RESOURCE_NOT_FOUND);
         }
     }
