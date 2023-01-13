@@ -52,7 +52,7 @@ public class ThemeService {
         if (isReserved(id)) {
             throw new BusinessException(CommonErrorCode.RESERVED_THEME_ERROR);
         }
-        if (((ThemeDao) themeRepository).updateById(Theme.of(requestDto, id)) == 0) {
+        if (((ThemeDao) themeRepository).update(Theme.of(requestDto, id)) == 0) {
             throw new BusinessException(CommonErrorCode.RESOURCE_NOT_FOUND);
         }
     }

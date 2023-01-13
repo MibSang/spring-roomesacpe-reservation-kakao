@@ -57,7 +57,7 @@ public class ThemeDao implements RoomEscapeRepository<Theme> {
         }
     }
 
-    public int updateById(Theme theme) {
+    public int update(Theme theme) {
         String sql = "UPDATE THEME SET name = ?, desc = ?, price = ? WHERE ID = ?;";
 
         return jdbcTemplate.update(sql, theme.getName(), theme.getDesc(), theme.getPrice(), theme.getId());
