@@ -12,8 +12,6 @@ import java.sql.SQLException;
 @AllArgsConstructor
 public class Theme {
 
-    public static final String BASE_URL = "/themes";
-
     private Long id;
     private String name;
     private String desc;

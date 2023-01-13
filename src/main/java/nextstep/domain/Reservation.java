@@ -15,8 +15,6 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class Reservation {
 
-    public static final String BASE_URL = "/reservations";
-
     private Long id;
     private LocalDate date;
     private LocalTime time;

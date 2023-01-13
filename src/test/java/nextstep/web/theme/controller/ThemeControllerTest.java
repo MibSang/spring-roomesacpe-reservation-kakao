@@ -3,7 +3,6 @@ package nextstep.web.theme.controller;
 
 import io.restassured.RestAssured;
 import nextstep.domain.Reservation;
-import nextstep.domain.Theme;
 import nextstep.web.common.exception.CommonErrorCode;
 import nextstep.web.common.repository.RoomEscapeRepository;
 import org.junit.jupiter.api.*;
@@ -65,10 +64,10 @@ public class ThemeControllerTest {
         String location = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(createBody)
-                .when().post(Theme.BASE_URL)
+                .when().post("/themes")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
-                .body("data.location", containsString(Theme.BASE_URL))
+                .body("data.location", containsString("/themes"))
                 .extract().body().jsonPath().get("data.location");
 
         RestAssured.given().log().all()

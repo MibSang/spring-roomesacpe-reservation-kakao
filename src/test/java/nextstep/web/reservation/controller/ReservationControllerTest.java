@@ -41,10 +41,10 @@ class ReservationControllerTest {
         String location = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(requestBody)
-                .when().post(Reservation.BASE_URL)
+                .when().post("/reservations")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
-                .body("data.location", containsString(Reservation.BASE_URL))
+                .body("data.location", containsString("/reservations"))
                 .extract().body().jsonPath().get("data.location");
 
         RestAssured.given().log().all()
