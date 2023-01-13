@@ -23,7 +23,7 @@ public class ReservationService {
     }
 
     public FindReservationResponseDto findReservation(Long id) {
-        Reservation reservation = reservationDao.findById(id)
+        Reservation reservation = reservationDao.findByIdThemeJoined(id)
                 .orElseThrow(() -> new BusinessException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
         return FindReservationResponseDto.of(reservation);

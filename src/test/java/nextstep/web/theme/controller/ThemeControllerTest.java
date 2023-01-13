@@ -3,6 +3,7 @@ package nextstep.web.theme.controller;
 
 import io.restassured.RestAssured;
 import nextstep.domain.Reservation;
+import nextstep.domain.Theme;
 import nextstep.web.common.exception.CommonErrorCode;
 import nextstep.web.common.repository.RoomEscapeRepository;
 import org.junit.jupiter.api.*;
@@ -38,7 +39,7 @@ public class ThemeControllerTest {
                 LocalDate.of(2022, 2, 11),
                 LocalTime.of(13, 0),
                 "tester",
-                1L
+                Theme.of(1L, "test", "testetsete", 2000)
         ));
     }
 

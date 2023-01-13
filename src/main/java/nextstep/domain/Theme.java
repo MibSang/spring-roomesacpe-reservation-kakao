@@ -17,6 +17,10 @@ public class Theme {
     private String desc;
     private Integer price;
 
+    private Theme(Long id) {
+        this.id = id;
+    }
+
     private Theme(String name, String desc, Integer price) {
         this.name = name;
         this.desc = desc;
@@ -25,6 +29,10 @@ public class Theme {
 
     public static Theme of(String name, String desc, Integer price) {
         return new Theme(name, desc, price);
+    }
+
+    public static Theme of(Long id, String name, String desc, Integer price) {
+        return new Theme(id, name, desc, price);
     }
 
     public static Theme of(CreateThemeRequestDto requestDto, Long id) {
@@ -51,5 +59,9 @@ public class Theme {
                 .desc(requestDto.getDesc())
                 .price(requestDto.getPrice())
                 .build();
+    }
+
+    public static Theme from(Long id) {
+        return new Theme(id);
     }
 }

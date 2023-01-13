@@ -1,6 +1,7 @@
 package nextstep.web.reservation.repository;
 
 import nextstep.domain.Reservation;
+import nextstep.domain.Theme;
 import nextstep.web.common.exception.BusinessException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +27,7 @@ class ReservationDaoTest {
                 .date(LocalDate.of(2023, 1, 10))
                 .time(LocalTime.MIDNIGHT)
                 .name("베인")
-                .themeId(1L)
+                .theme(Theme.of(1L, "test", "testetsete", 2000))
                 .build();
     }
 

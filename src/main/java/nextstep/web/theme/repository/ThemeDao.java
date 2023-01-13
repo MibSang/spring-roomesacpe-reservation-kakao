@@ -37,7 +37,7 @@ public class ThemeDao implements RoomEscapeRepository<Theme> {
 
 
     public Optional<Theme> findById(Long id) {
-        String sql = "SELECT * FROM THEME WHERE ID = ?;";
+        String sql = "SELECT * FROM THEME WHERE id = ?;";
         Theme theme;
         try {
             theme = jdbcTemplate.queryForObject(sql, themeRowMapper, id);
@@ -55,14 +55,14 @@ public class ThemeDao implements RoomEscapeRepository<Theme> {
     }
 
     public void deleteById(Long id) {
-        String sql = "DELETE FROM THEME WHERE ID = ?;";
+        String sql = "DELETE FROM THEME WHERE id = ?;";
         if (jdbcTemplate.update(sql, id) == 0) {
             throw new BusinessException(CommonErrorCode.RESOURCE_NOT_FOUND);
         }
     }
 
     public int update(Theme theme) {
-        String sql = "UPDATE THEME SET name = ?, desc = ?, price = ? WHERE ID = ?;";
+        String sql = "UPDATE THEME SET name = ?, desc = ?, price = ? WHERE id = ?;";
 
         return jdbcTemplate.update(sql, theme.getName(), theme.getDesc(), theme.getPrice(), theme.getId());
     }

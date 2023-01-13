@@ -37,7 +37,23 @@ public class ReservationDao implements RoomEscapeRepository<Reservation> {
 
 
     public Optional<Reservation> findById(Long id) {
-        String sql = "SELECT * FROM RESERVATION WHERE ID = ?;";
+        String sql = "SELECT * FROM RESERVATION WHERE id = ?;";
+        Reservation reservation;
+        try {
+            reservation = jdbcTemplate.queryForObject(sql, reservationRowMapper, id);
+        } catch (EmptyResultDataAccessException e) {
+            reservation = null;
+        }
+
+        return Optional.ofNullable(reservation);
+    }
+
+    public Optional<Reservation> findByIdThemeJoined(Long id) {
+        String sql = "SELECT R.id AS id, R.date AS date, R.time AS time, R.name AS name, T.id AS theme_id, T.name AS theme_name, T.desc AS theme_desc, T.price AS theme_price " +
+                "FROM RESERVATION AS R " +
+                "JOIN THEME AS T " +
+                "ON R.theme_id = T.id " +
+                "WHERE R.id = ?;";
         Reservation reservation;
         try {
             reservation = jdbcTemplate.queryForObject(sql, reservationRowMapper, id);
@@ -71,7 +87,7 @@ public class ReservationDao implements RoomEscapeRepository<Reservation> {
                 "date", reservation.getDate(),
                 "time", reservation.getTime(),
                 "name", reservation.getName(),
-                "theme_id", reservation.getThemeId()
+                "theme_id", reservation.getTheme().getId()
         );
     }
 

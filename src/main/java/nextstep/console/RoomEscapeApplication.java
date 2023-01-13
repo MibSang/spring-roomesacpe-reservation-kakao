@@ -1,6 +1,7 @@
 package nextstep.console;
 
 import nextstep.domain.Reservation;
+import nextstep.domain.Theme;
 import nextstep.web.reservation.repository.ReservationDao;
 import nextstep.web.common.repository.RoomEscapeRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,7 +26,7 @@ public class RoomEscapeApplication {
         dataSource.setDriverClassName("org.h2.Driver");
         RoomEscapeRepository<Reservation> reservationDao = new ReservationDao(new JdbcTemplate(dataSource));
 
-        Long themeId = 1L;
+        Theme theme = Theme.of(1L, "하이", "하이하이", 2000);
 
         while (true) {
             System.out.println();
@@ -47,7 +48,7 @@ public class RoomEscapeApplication {
                         LocalDate.parse(date),
                         LocalTime.parse(time + ":00"),
                         name,
-                        themeId
+                        theme
                 );
 
                 Long generatedId = reservationDao.save(reservation);
@@ -71,7 +72,7 @@ public class RoomEscapeApplication {
                 System.out.println("예약 날짜: " + reservation.getDate());
                 System.out.println("예약 시간: " + reservation.getTime());
                 System.out.println("예약자 이름: " + reservation.getName());
-                System.out.println("예약 테마 번호: " + reservation.getThemeId());
+                System.out.println("예약 테마 번호: " + reservation.getTheme().getId());
             }
 
             if (input.startsWith(DELETE)) {

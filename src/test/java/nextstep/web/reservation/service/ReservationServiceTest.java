@@ -1,6 +1,7 @@
 package nextstep.web.reservation.service;
 
 import nextstep.domain.Reservation;
+import nextstep.domain.Theme;
 import nextstep.web.reservation.dto.CreateReservationRequestDto;
 import nextstep.web.reservation.repository.ReservationDao;
 import org.assertj.core.api.Assertions;
@@ -37,7 +38,7 @@ class ReservationServiceTest {
                 .date(LocalDate.of(2023, 1, 10))
                 .time(LocalTime.MIDNIGHT)
                 .name("베인")
-                .themeId(1L)
+                .theme(Theme.of(1L, "test", "testetsete", 2000))
                 .build();
     }
 
@@ -57,12 +58,12 @@ class ReservationServiceTest {
     void 예약을_조회할_수_있다() {
         Long id = 1L;
 
-        when(reservationDao.findById(anyLong()))
+        when(reservationDao.findByIdThemeJoined(anyLong()))
                 .thenReturn(Optional.ofNullable(reservation));
 
         Assertions.assertThat(reservationService.findReservation(id).getId())
                 .isEqualTo(id);
-        verify(reservationDao, times(1)).findById(id);
+        verify(reservationDao, times(1)).findByIdThemeJoined(id);
     }
 
     @Test
