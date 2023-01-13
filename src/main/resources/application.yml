@@ -16,3 +16,6 @@ server:
     include-message: never
     include-stacktrace: never
     whitelabel.enabled: true
+logging:
+  level:
+    root: debug
