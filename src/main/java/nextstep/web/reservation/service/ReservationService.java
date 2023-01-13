@@ -1,37 +1,32 @@
 package nextstep.web.reservation.service;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.domain.Reservation;
 import nextstep.web.reservation.dto.CreateReservationRequestDto;
 import nextstep.web.reservation.dto.CreateReservationResponseDto;
 import nextstep.web.reservation.dto.FindReservationResponseDto;
-import nextstep.web.common.repository.RoomEscapeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import nextstep.web.reservation.repository.ReservationDao;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class ReservationService {
 
-    private final RoomEscapeRepository<Reservation> reservationRepository;
-
-    @Autowired
-    public ReservationService(@Qualifier("reservationDao") RoomEscapeRepository<Reservation> reservationRepository) {
-        this.reservationRepository = reservationRepository;
-    }
+    private final ReservationDao reservationDao;
 
     public CreateReservationResponseDto createReservation(CreateReservationRequestDto requestDto) {
         Reservation reservation = Reservation.from(requestDto);
 
-        return CreateReservationResponseDto.from(reservationRepository.save(reservation));
+        return CreateReservationResponseDto.from(reservationDao.save(reservation));
     }
 
     public FindReservationResponseDto findReservation(Long id) {
-        Reservation reservation = reservationRepository.findById(id);
+        Reservation reservation = reservationDao.findById(id);
 
         return FindReservationResponseDto.of(reservation);
     }
 
     public void deleteReservation(Long id) {
-        reservationRepository.deleteById(id);
+        reservationDao.deleteById(id);
     }
 }

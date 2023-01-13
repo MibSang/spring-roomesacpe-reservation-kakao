@@ -1,63 +1,55 @@
 package nextstep.web.theme.service;
 
-import nextstep.domain.Reservation;
+import lombok.RequiredArgsConstructor;
 import nextstep.domain.Theme;
 import nextstep.web.common.exception.BusinessException;
 import nextstep.web.common.exception.CommonErrorCode;
 import nextstep.web.reservation.repository.ReservationDao;
 import nextstep.web.theme.dto.*;
-import nextstep.web.common.repository.RoomEscapeRepository;
 import nextstep.web.theme.repository.ThemeDao;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class ThemeService {
 
-    private final RoomEscapeRepository<Theme> themeRepository;
-    private final RoomEscapeRepository<Reservation> reservationRepository;
+    private final ThemeDao themeDao;
+    private final ReservationDao reservationDao;
 
-    @Autowired
-    public ThemeService(@Qualifier("themeDao") RoomEscapeRepository<Theme> themeRepository,
-                        @Qualifier("reservationDao") RoomEscapeRepository<Reservation> reservationRepository) {
-        this.themeRepository = themeRepository;
-        this.reservationRepository = reservationRepository;
-    }
 
     public CreateThemeResponseDto createTheme(CreateThemeRequestDto requestDto) {
         Theme theme = Theme.from(requestDto);
 
-        return CreateThemeResponseDto.from(themeRepository.save(theme));
+        return CreateThemeResponseDto.from(themeDao.save(theme));
     }
 
     public FindThemeResponseDto findTheme(Long id) {
-        Theme theme = themeRepository.findById(id);
+        Theme theme = themeDao.findById(id);
 
         return FindThemeResponseDto.of(theme);
     }
 
     public FindAllThemeResponseDto findAllTheme() {
-        return new FindAllThemeResponseDto(themeRepository.findAll());
+        return new FindAllThemeResponseDto(themeDao.findAll());
     }
 
     public void deleteTheme(Long id) {
         if (isReserved(id)) {
             throw new BusinessException(CommonErrorCode.RESERVED_THEME_ERROR);
         }
-        themeRepository.deleteById(id);
+        themeDao.deleteById(id);
     }
 
     public void updateTheme(CreateThemeRequestDto requestDto, Long id) {
         if (isReserved(id)) {
             throw new BusinessException(CommonErrorCode.RESERVED_THEME_ERROR);
         }
-        if (((ThemeDao) themeRepository).update(Theme.of(requestDto, id)) == 0) {
+        if (themeDao.update(Theme.of(requestDto, id)) == 0) {
             throw new BusinessException(CommonErrorCode.RESOURCE_NOT_FOUND);
         }
     }
 
     private boolean isReserved(Long themeId) {
-        return ((ReservationDao) reservationRepository).findByThemeId(themeId).size() != 0;
+        return reservationDao.findByThemeId(themeId).size() != 0;
     }
 }
